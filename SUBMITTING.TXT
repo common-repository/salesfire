@@ -1,0 +1,49 @@
+Ensure you have bumped the version inside of readme.txt and salesfire.php, and added an entry to Changelog within the readme.txt.
+
+# Cloning SVN
+
+You need to clone svn, e.g. into a svn/ directory.
+
+```
+svn checkout --depth immediates https://plugins.svn.wordpress.org/salesfire svn
+```
+
+(You will need to login with username/password for WordPress login.)
+
+You can create another folder called working-env with a installation of WordPress. Inside the plugins you can clone the `salesfire` plugin from GitHub.
+
+# Updating SVN
+
+You will need to copy the working plugin into the trunk/ within /svn, e.g.
+
+```
+rsync -rc --exclude-from="../working-env/wp-content/plugins/salesfire/.distignore" "../working-env/wp-content/plugins/salesfire/" trunk/ --delete --delete-excluded
+```
+
+(You will also need to copy across .wordpress-org folder if necessary.)
+
+Run following:
+
+```
+svn add . --force
+```
+
+You can check what has been modified with:
+
+svn status | grep '^\!' | sed 's/! *//' | xargs -I% svn rm %@
+
+You then need to copy the trunk to the new version:
+
+```
+svn cp "trunk" "tags/1.0.1"
+```
+
+And then submit:
+
+```
+svn ci -m "Updated XYZ"
+```
+
+You will then see the updated version here: https://wordpress.org/plugins/salesfire/.
+
+(It may take several minutes to reflect bump.)
